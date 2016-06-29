@@ -1,6 +1,7 @@
 var fs = require('fs');
 var path = require('path');
 var _ = require('underscore');
+var httpHelpers = require('../web/http-helpers');
 
 /*
  * You will need to reuse the same paths many times over in the course of this sprint.
@@ -10,7 +11,7 @@ var _ = require('underscore');
  */
 
 exports.paths = {
-  siteAssets: path.join(__dirname, '../web/public'),
+  siteAssets: path.join(__dirname, '../web/public'),  
   archivedSites: path.join(__dirname, '../archives/sites'),
   list: path.join(__dirname, '../archives/sites.txt')
 };
@@ -26,16 +27,36 @@ exports.initialize = function(pathsObj) {
 // modularize your code. Keep it clean!
 
 exports.readListOfUrls = function() {
+  // read from sites.txt
 };
 
 exports.isUrlInList = function() {
+  // checks against sites.txt
 };
 
-exports.addUrlToList = function() {
+exports.addUrlToList = function(url, res) {
+  // writes to sites.txt
+  fs.writeFile(exports.paths.list, url, (err) => {
+    if (err) {
+      throw err;
+    } else {
+      fs.readFile('./web/public/loading.html', (err, data) => {
+        if (err) {
+          throw err;
+        } else {
+          res.writeHead(200, httpHelpers.headers);
+          res.write(data);
+          res.end();  
+        }
+      });
+    } 
+  });
 };
 
 exports.isUrlArchived = function() {
+  // checks against sites folder
 };
 
 exports.downloadUrls = function() {
+  // writes to sites folder
 };
