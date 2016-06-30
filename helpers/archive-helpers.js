@@ -44,28 +44,49 @@ exports.isUrlInList = function(str, cb) {
   });
 };
 
-exports.addUrlToList = function(url, res) {
+exports.addUrlToList = function(str, cb) {
   // writes to sites.txt
-  fs.appendFile(exports.paths.list, url + '\n', (err) => {
+  fs.appendFile(exports.paths.list, str + '\n', (err) => {
     if (err) {
       throw err;
     } else {
-      fs.readFile('./web/public/loading.html', (err, data) => {
-        if (err) {
-          throw err;
-        } else {
-          // httpHelpers.headers['Content-Type'] = 'application/json';
-          res.writeHead(200, httpHelpers.headers);
-          res.write(data);
-          res.end();  
-        }
-      });
+      cb();
     } 
   });
 };
+// exports.addUrlToList = function(url, res) {
+//   // writes to sites.txt
+//   fs.appendFile(exports.paths.list, url + '\n', (err) => {
+//     if (err) {
+//       throw err;
+//     } else {
+//       fs.readFile('./web/public/loading.html', (err, data) => {
+//         if (err) {
+//           throw err;
+//         } else {
+//           // httpHelpers.headers['Content-Type'] = 'application/json';
+//           res.writeHead(200, httpHelpers.headers);
+//           res.write(data);
+//           res.end();  
+//         }
+//       });
+//     } 
+//   });
+// };
 
-exports.isUrlArchived = function() {
+exports.isUrlArchived = function(str, cb) {
   // checks against sites folder
+  fs.readdir(exports.paths.archivedSites, (err, filesArray) => {
+    if (err) {
+      throw err;
+    } else {
+      var contains = false;
+      if (filesArray.indexOf(str) !== -1) {
+        contains = true;
+      }
+      cb(contains);
+    }
+  });
 };
 
 exports.downloadUrls = function() {
