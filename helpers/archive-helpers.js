@@ -83,7 +83,8 @@ exports.downloadUrls = function(urlsArray) {
   urlsArray.forEach((url) => {
     exports.isUrlArchived(url, (exists) => {
       if (!exists) {
-        fs.mkdir('archives/sites/' + url);   
+        var file = fs.openSync('archives/sites/' + url, 'wx');   
+        fs.closeSync(file);
       }
     });
   });
