@@ -26,8 +26,11 @@ exports.initialize = function(pathsObj) {
 // The following function names are provided to you to suggest how you might
 // modularize your code. Keep it clean!
 
-exports.readListOfUrls = function() {
+exports.readListOfUrls = function(cb) {
   // read from sites.txt
+  fs.readFile(exports.paths.list, (err, data) => {
+    cb(data.toString().split('\n'));
+  });
 };
 
 exports.isUrlInList = function() {
@@ -36,7 +39,7 @@ exports.isUrlInList = function() {
 
 exports.addUrlToList = function(url, res) {
   // writes to sites.txt
-  fs.writeFile(exports.paths.list, url, (err) => {
+  fs.appendFile(exports.paths.list, url + '\n', (err) => {
     if (err) {
       throw err;
     } else {
@@ -44,6 +47,7 @@ exports.addUrlToList = function(url, res) {
         if (err) {
           throw err;
         } else {
+          // httpHelpers.headers['Content-Type'] = 'application/json';
           res.writeHead(200, httpHelpers.headers);
           res.write(data);
           res.end();  
