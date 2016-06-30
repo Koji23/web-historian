@@ -66,6 +66,7 @@ exports.addUrlToList = function(str, cb) {
 exports.isUrlArchived = function(str, cb) {
   // checks against sites folder
   fs.readdir(exports.paths.archivedSites, (err, filesArray) => {
+    // console.log("!!!files array !!!!", filesArray);
     if (err) {
       throw err;
     } else {
