@@ -25,13 +25,33 @@ exports.handleRequest = function (req, res) {
       //redirect to loading.html
     var urlToArchive;
     req.on('data', (chunk) => {
-      // console.log(chunk + '');
+      console.log(chunk + '');
       urlToArchive += chunk;
     });
     req.on('end', () => {
-      urlToArchive = unescape(urlToArchive.toString()).slice(31);
-      console.log('URL formated:', urlToArchive);
-      archive.addUrlToList(urlToArchive, res); 
+      urlToArchive = unescape(urlToArchive.toString()).split('=')[1];
+      // archive.addUrlToList(urlToArchive, res); 
+      archive.addUrlToList(urlToArchive, () => {
+        archive.isUrlArchived(urlToArchive, (exists) => {
+          if (exists) {
+            // redirect to archived html site
+          } else {
+            //redirect to loading
+            fs.readFile('./web/public/loading.html', (err, data) => {
+              if (err) {
+                throw err;
+              } else {
+                // httpHelpers.headers['Content-Type'] = 'application/json';
+                console.log("hellooooo4");
+                res.writeHead(200, httpHelpers.headers);
+                res.write(data);
+                res.end();  
+              }
+            });
+          }
+        });
+        
+      });
     });
   } else if (req.method === 'OPTIONS') {
     res.writeHead(200, httpHelpers.headers);

@@ -46,33 +46,22 @@ exports.isUrlInList = function(str, cb) {
 
 exports.addUrlToList = function(str, cb) {
   // writes to sites.txt
-  fs.appendFile(exports.paths.list, str + '\n', (err) => {
-    if (err) {
-      throw err;
-    } else {
-      cb();
-    } 
+  exports.isUrlInList(str, (exists) => {
+    if (!exists) {
+
+      fs.appendFile(exports.paths.list, str + '\n', (err) => {
+        if (err) {
+          throw err;
+        } else {
+          if (typeof cb === 'function') {
+            cb();
+          }
+        } 
+      });
+    }
   });
 };
-// exports.addUrlToList = function(url, res) {
-//   // writes to sites.txt
-//   fs.appendFile(exports.paths.list, url + '\n', (err) => {
-//     if (err) {
-//       throw err;
-//     } else {
-//       fs.readFile('./web/public/loading.html', (err, data) => {
-//         if (err) {
-//           throw err;
-//         } else {
-//           // httpHelpers.headers['Content-Type'] = 'application/json';
-//           res.writeHead(200, httpHelpers.headers);
-//           res.write(data);
-//           res.end();  
-//         }
-//       });
-//     } 
-//   });
-// };
+
 
 exports.isUrlArchived = function(str, cb) {
   // checks against sites folder
@@ -89,6 +78,22 @@ exports.isUrlArchived = function(str, cb) {
   });
 };
 
-exports.downloadUrls = function() {
+exports.downloadUrls = function(urlsArray) {
   // writes to sites folder
+  urlsArray.forEach((url) => {
+    exports.isUrlArchived(url, (exists) => {
+      if (!exists) {
+        fs.mkdir('archives/sites/' + url);   
+      }
+    });
+  });
 };
+
+
+
+
+
+
+
+
+
