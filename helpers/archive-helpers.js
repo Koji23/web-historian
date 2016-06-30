@@ -33,8 +33,15 @@ exports.readListOfUrls = function(cb) {
   });
 };
 
-exports.isUrlInList = function() {
+exports.isUrlInList = function(str, cb) {
   // checks against sites.txt
+  exports.readListOfUrls((dataArray) => {
+    if (dataArray.indexOf(str) !== -1) {
+      cb(true);
+    } else {
+      cb(false);
+    }
+  });
 };
 
 exports.addUrlToList = function(url, res) {
