@@ -3,13 +3,6 @@ var path = require('path');
 var _ = require('underscore');
 var httpHelpers = require('../web/http-helpers');
 
-/*
- * You will need to reuse the same paths many times over in the course of this sprint.
- * Consider using the `paths` object below to store frequently used file paths. This way,
- * if you move any files, you'll only need to change your code in one place! Feel free to
- * customize it in any way you wish.
- */
-
 exports.paths = {
   siteAssets: path.join(__dirname, '../web/public'),  
   archivedSites: path.join(__dirname, '../archives/sites'),
@@ -48,12 +41,11 @@ exports.addUrlToList = function(str, cb) {
   // writes to sites.txt
   exports.isUrlInList(str, (exists) => {
     if (!exists) {
-
       fs.appendFile(exports.paths.list, str + '\n', (err) => {
         if (err) {
           throw err;
         } else {
-          if (typeof cb === 'function') {
+          if (typeof cb === 'function') { /// <= can we get rid of if check?
             cb();
           }
         } 
@@ -66,7 +58,6 @@ exports.addUrlToList = function(str, cb) {
 exports.isUrlArchived = function(str, cb) {
   // checks against sites folder
   fs.readdir(exports.paths.archivedSites, (err, filesArray) => {
-    // console.log("!!!files array !!!!", filesArray);
     if (err) {
       throw err;
     } else {
