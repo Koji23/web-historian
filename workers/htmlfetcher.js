@@ -42,12 +42,8 @@ exports.fetch = function(url) {
     //fun fetcher on all sites not in sites folder
 
 archive.readListOfUrls((array) => {
-  // console.log('array: ', array);
   array.forEach((data) => {
-    // var urlD = UrlMethod.parse(data).host;
-    // console.log('data: ', urlD);
     archive.isUrlArchived(data + '.html', (exists) => {
-      // console.log('exists: ', exists);
       if (!exists) {
         exports.fetch(data);
       }
